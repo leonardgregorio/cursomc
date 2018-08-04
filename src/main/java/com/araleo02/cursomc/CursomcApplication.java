@@ -1,6 +1,5 @@
 package com.araleo02.cursomc;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.araleo02.cursomc.domain.Categoria;
 import com.araleo02.cursomc.domain.Cidade;
+import com.araleo02.cursomc.domain.Cliente;
+import com.araleo02.cursomc.domain.Endereco;
 import com.araleo02.cursomc.domain.Estado;
 import com.araleo02.cursomc.domain.Produto;
+import com.araleo02.cursomc.domain.enums.TipoCliente;
 import com.araleo02.cursomc.repositories.CategoriaRepository;
 import com.araleo02.cursomc.repositories.CidadeRepository;
+import com.araleo02.cursomc.repositories.ClienteRepository;
+import com.araleo02.cursomc.repositories.EnderecoRepository;
 import com.araleo02.cursomc.repositories.EstadoRepository;
 import com.araleo02.cursomc.repositories.ProdutoRepository;
 
@@ -32,6 +36,13 @@ public class CursomcApplication implements CommandLineRunner {
 	@Autowired
 	private EstadoRepository estadoRepository;
 
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
+	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
 	}
@@ -54,6 +65,12 @@ public class CursomcApplication implements CommandLineRunner {
 		Cidade c2 = new Cidade(null, "Sao Carlos", e2);
 		Cidade c3 = new Cidade(null, "Niteroi", e3);
 
+		Cliente cr1 = new Cliente(null, "Maria Jeus", "mariamaria@gmail.com", "3919191919-09", TipoCliente.PESSOAFISICA);
+		cr1.getTelefones().addAll(Arrays.asList("16 97191919","19 238374732"));
+		
+		Endereco ed1 = new Endereco(null, "Rua Flores", "178", "", "jardim Silva", "14808022", cr1, c1);
+		Endereco ed2 = new Endereco(null, "Rua nao sei", "111", "", "jardim maria", "232323232", cr1, c2);
+		
 		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
 		cat2.getProdutos().add(p2);
 
@@ -65,10 +82,15 @@ public class CursomcApplication implements CommandLineRunner {
 		e2.getCidades().addAll(Arrays.asList(c2));
 		e3.getCidades().addAll(Arrays.asList(c3));
 
+		cr1.getEnderecos().addAll(Arrays.asList(ed1,ed2));
+		
+		
 		categoriaRepository.save(Arrays.asList(cat1, cat2));
 		produtoRepository.save(Arrays.asList(p1, p2, p3));
 		estadoRepository.save(Arrays.asList(e1, e2, e3));
 		cidadeRepository.save(Arrays.asList(c1, c2, c3));
-
+		clienteRepository.save(Arrays.asList(cr1));
+		enderecoRepository.save(Arrays.asList(ed1,ed2));
+		
 	}
 }
